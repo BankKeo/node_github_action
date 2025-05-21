@@ -1,0 +1,29 @@
+# node modules - you install them in the container
+node_modules
+
+# compiled output
+dist
+
+# TypeScript cache
+*.tsbuildinfo
+
+# logs
+*.log
+logs
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Docker stuff
+Dockerfile
+docker-compose.yml
+
+# IDEs / editors
+.vscode
+.idea
+*.swp
