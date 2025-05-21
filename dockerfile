@@ -20,7 +20,7 @@ COPY .env .env
 RUN npm run build
 
 # 7. Expose the port your app runs on
-EXPOSE 3000
+EXPOSE 3001
 
 # 8. Run the compiled JavaScript
 CMD ["node", "dist/index.js"]
