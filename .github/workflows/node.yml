@@ -1,0 +1,44 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI/CD
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - run: npm ci
+
+      - name: Create .env file from GitHub Secrets
+        run: |
+          echo "${{ secrets.PROD_ENV }}" > .env
+
+      # Optional: Run tests here if you want
+      # - name: Run tests
+      #   run: npm test
+
+      - name: Build and run Docker container
+        run: |
+          sudo docker stop api || true
+          sudo docker rm api || true
+          sudo docker build -t api .
+          sudo docker run -d -p 3001:3001 --name api api
